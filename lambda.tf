@@ -9,13 +9,16 @@ resource "aws_lambda_function" "csv_to_postgres" {
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.11"
-  filename      =  data.archive_file.lambda_zip.output_path
+  filename      = data.archive_file.lambda_zip.output_path
   architectures = ["x86_64"]
-  timeout = 600
+  timeout       = 600
+
+  # Ensure Lambda is created after EC2
+  depends_on = [aws_instance.postgres_ec2]
 
   environment {
     variables = {
-      DB_HOST = var.db_host
+      DB_HOST = aws_instance.postgres_ec2.private_ip # automatically fetch EC2 private IP
       DB_NAME = var.db_name
       DB_USER = var.db_user
       DB_PASS = var.db_pass
@@ -25,15 +28,14 @@ resource "aws_lambda_function" "csv_to_postgres" {
   layers = [aws_lambda_layer_version.psycopg_layer.arn]
 
   vpc_config {
-    subnet_ids = ["subnet-0e7a318252d331cc3"]
+    subnet_ids         = ["subnet-0e7a318252d331cc3"]
     security_group_ids = [aws_security_group.postgres_sg.id]
   }
 }
 
-
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = var.vpc_id
-  service_name = "com.amazonaws.us-east-1.s3"
+  vpc_id          = var.vpc_id
+  service_name    = "com.amazonaws.us-east-1.s3"
   route_table_ids = [var.route_table_id]
 
   vpc_endpoint_type = "Gateway"

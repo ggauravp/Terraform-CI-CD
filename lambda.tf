@@ -14,11 +14,11 @@ resource "aws_lambda_function" "csv_to_postgres" {
   timeout       = 600
 
   # Ensure Lambda is created after EC2
-  depends_on = [aws_instance.db]
+  depends_on = [aws_instance.postgres_ec2]
 
   environment {
     variables = {
-      DB_HOST = aws_instance.db.private_ip # automatically fetch EC2 private IP
+      DB_HOST = aws_instance.postgres_ec2.private_ip # automatically fetch EC2 private IP
       DB_NAME = var.db_name
       DB_USER = var.db_user
       DB_PASS = var.db_pass

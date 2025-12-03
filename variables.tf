@@ -19,11 +19,6 @@ variable "db_pass" {
   sensitive   = true
 }
 
-variable "db_host" {
-  type        = string
-  description = "Postgres host"
-}
-
 variable "vpc_id" {
   type        = string
   description = "VPC ID"

@@ -18,7 +18,7 @@ resource "aws_lambda_function" "csv_to_postgres" {
 
   environment {
     variables = {
-      DB_HOST = aws_instance.db.private_ip  # automatically fetch EC2 private IP
+      DB_HOST = aws_instance.db.private_ip # automatically fetch EC2 private IP
       DB_NAME = var.db_name
       DB_USER = var.db_user
       DB_PASS = var.db_pass
@@ -34,8 +34,8 @@ resource "aws_lambda_function" "csv_to_postgres" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = var.vpc_id
-  service_name = "com.amazonaws.us-east-1.s3"
+  vpc_id          = var.vpc_id
+  service_name    = "com.amazonaws.us-east-1.s3"
   route_table_ids = [var.route_table_id]
 
   vpc_endpoint_type = "Gateway"

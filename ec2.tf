@@ -2,16 +2,16 @@
 resource "aws_security_group" "postgres_sg" {
   name        = "postgres_sg"
   description = "Allow SSH inbound traffic and PostgreSQL"
-  vpc_id      = ""  # leave blank for default VPC
+  vpc_id      = "" # leave blank for default VPC
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # allows SSH from anywhere 
+    cidr_blocks = ["0.0.0.0/0"] # allows SSH from anywhere 
   }
 
-   # Allow PostgreSQL (5432) from anywhere 
+  # Allow PostgreSQL (5432) from anywhere 
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -28,9 +28,9 @@ resource "aws_security_group" "postgres_sg" {
 }
 # EC2 Instance for Postgres
 resource "aws_instance" "postgres_ec2" {
-  ami           = "ami-0ecb62995f68bb549"  # Ubuntu 22.04
-  instance_type = "t2.micro"
-  key_name      = "test-keypair"           # Your AWS key pair name
+  ami                         = "ami-0ecb62995f68bb549" # Ubuntu 22.04
+  instance_type               = "t2.micro"
+  key_name                    = "test-keypair" # Your AWS key pair name
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.postgres_sg.id]
 

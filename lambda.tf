@@ -28,7 +28,7 @@ resource "aws_lambda_function" "csv_to_postgres" {
   layers = [aws_lambda_layer_version.psycopg_layer.arn]
 
   vpc_config {
-    subnet_ids         = ["subnet-0e7a318252d331cc3"]
+    subnet_ids         = [var.lambda_subnet_id]
     security_group_ids = [aws_security_group.postgres_sg.id]
   }
 }

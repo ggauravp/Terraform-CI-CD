@@ -38,7 +38,7 @@ jobs:
 
   # CD: Run on merge to main
   terraform-apply:
-    if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:

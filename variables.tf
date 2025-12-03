@@ -28,3 +28,7 @@ variable "route_table_id" {
   type        = string
   description = "Route Table ID"
 }
+variable "lambda_subnet_id" {
+  description = "Subnet ID used for Lambda VPC configuration"
+  type        = string
+}

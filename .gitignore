@@ -6,3 +6,4 @@ crash.log
 override.tf
 override.tf.json
 terraform.tfstate.1764322064.backup
+layer.zip

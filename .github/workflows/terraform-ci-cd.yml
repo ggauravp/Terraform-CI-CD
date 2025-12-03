@@ -37,6 +37,8 @@ jobs:
 
   # CD: Run on merge to main
   terraform-apply:
+    needs: [terraform-ci]
+    
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 

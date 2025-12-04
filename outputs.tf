@@ -9,7 +9,7 @@ output "bucket_name" {
 output "lambda_arn" {
   value = aws_lambda_function.csv_to_postgres.arn
 }
- 
+
 output "dynamodb_table_name" {
   value = aws_dynamodb_table.tf_lock.name
 }

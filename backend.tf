@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket         = "gaurav-terraform-state2003111"
-    key            = "terraform.tfstate"
-    region         = "us-east-1"
+    bucket = "gaurav-terraform-state2003111"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
     # No dynamodb_table here
     # Enable locking in S3
     skip_credentials_validation = true

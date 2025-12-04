@@ -3,12 +3,16 @@ terraform {
     bucket         = "gaurav-terraform-state2003111"
     key            = "terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-lock"
+    # No dynamodb_table here
+    # Enable locking in S3
+    skip_credentials_validation = true
   }
 }
 
 resource "aws_s3_bucket" "tf_state" {
   bucket = "gaurav-terraform-state2003111"
+
+  object_lock_enabled = true
 }
 
 resource "aws_s3_bucket_versioning" "tf_state_versioning" {
@@ -19,13 +23,13 @@ resource "aws_s3_bucket_versioning" "tf_state_versioning" {
   }
 }
 
-resource "aws_dynamodb_table" "tf_lock" {
-  name         = "terraform-lock"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
+resource "aws_s3_bucket_object_lock_configuration" "tf_lock" {
+  bucket = aws_s3_bucket.tf_state.id
 
-  attribute {
-    name = "LockID"
-    type = "S"
+  rule {
+    default_retention {
+      mode = "COMPLIANCE"
+      days = 1
+    }
   }
 }

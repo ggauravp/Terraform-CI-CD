@@ -76,8 +76,8 @@ resource "aws_iam_role" "github_actions" {
         }
         StringLike = {
           "token.actions.githubusercontent.com:sub" = [
-            "repo:ggauravp/terraform-cicd:ref:refs/heads/main",
-            "repo:ggauravp/terraform-cicd:ref:refs/pull/*/merge"
+            "repo:ggauravp/Terraform-CI-CD:ref:refs/heads/main",
+            "repo:ggauravp/Terraform-CI-CD:ref:refs/pull/*/merge"
           ]
         }
       }

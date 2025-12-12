@@ -72,9 +72,9 @@ resource "aws_iam_openid_connect_provider" "github" {
 }
 
 # create iam role for github actions
-resource "aws_iam_role" "github_actions"{
+resource "aws_iam_role" "github_actions" {
   name = "github-actions-oidc-role"
-   assume_role_policy = jsonencode({
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
@@ -88,7 +88,7 @@ resource "aws_iam_role" "github_actions"{
         }
       }
     }]
-   })
+  })
 }
 
 resource "aws_iam_policy" "github_actions_policy" {
@@ -97,8 +97,8 @@ resource "aws_iam_policy" "github_actions_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = [
+        Effect = "Allow"
+        Action = [
           "s3:*",
           "ec2:*",
           "iam:*",
@@ -116,5 +116,5 @@ resource "aws_iam_policy" "github_actions_policy" {
 resource "aws_iam_role_policy_attachment" "github_actions_attach" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions_policy.arn
-  
+
 }

@@ -72,7 +72,10 @@ resource "aws_iam_role" "github_actions" {
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:ggauravp/terraform-cicd:*"
+          "token.actions.githubusercontent.com:sub" = [
+            "repo:ggauravp/terraform-cicd:ref:refs/heads/main",
+            "repo:ggauravp/terraform-cicd:ref:refs/pull/*"
+          ]
         }
       }
     }]

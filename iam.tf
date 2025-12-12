@@ -58,22 +58,17 @@ resource "aws_iam_role_policy_attachment" "attach" {
   policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
-# create oidc provider for github actions
+# Create GitHub OIDC provider
 resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
-
-  client_id_list = [
-    "sts.amazonaws.com"
-  ]
-
-  thumbprint_list = [
-    "6938fd4d98bab03faadb97b34396831e3780aea1"
-  ]
+  url             = "https://token.actions.githubusercontent.com"
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
 }
 
-# create iam role for github actions
+# Create IAM role for GitHub Actions
 resource "aws_iam_role" "github_actions" {
   name = "github-actions-oidc-role"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -83,14 +78,19 @@ resource "aws_iam_role" "github_actions" {
       }
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
+        StringEquals = {
+          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+        }
+        # Optional: use wildcard for sub to avoid token mismatch
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:ggauravp/terraform-cicd:*"
+          "token.actions.githubusercontent.com:sub" = "repo:ggauravp/Terraform-CI-CD:*"
         }
       }
     }]
   })
 }
 
+# Create IAM policy for GitHub Actions
 resource "aws_iam_policy" "github_actions_policy" {
   name = "github-actions-policy"
   policy = jsonencode({
@@ -113,8 +113,8 @@ resource "aws_iam_policy" "github_actions_policy" {
   })
 }
 
+# Attach policy to the role
 resource "aws_iam_role_policy_attachment" "github_actions_attach" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions_policy.arn
-
 }

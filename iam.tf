@@ -58,18 +58,6 @@ resource "aws_iam_role_policy_attachment" "attach" {
   policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
-# create oidc provider for github actions
-resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
-
-  client_id_list = [
-    "sts.amazonaws.com"
-  ]
-
-  thumbprint_list = [
-    "6938fd4d98bab03faadb97b34396831e3780aea1"
-  ]
-}
 
 # create iam role for github actions
 resource "aws_iam_role" "github_actions" {
@@ -79,7 +67,7 @@ resource "aws_iam_role" "github_actions" {
     Statement = [{
       Effect = "Allow"
       Principal = {
-        Federated = aws_iam_openid_connect_provider.github.arn
+        Federated = "arn:aws:iam::355511497902:oidc-provider/token.actions.githubusercontent.com"
       }
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
